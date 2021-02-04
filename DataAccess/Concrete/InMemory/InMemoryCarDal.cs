@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -17,25 +18,25 @@ namespace DataAccess.Concrete.InMemory
             {
                 new Car()
                 {
-                    Id = 1, BrandId = 1, ColorId = 1, ModelYear = "2011", DailyPrice = 135000, Description = "Muayyer Mitsubishi L200 4*4"
+                    Id = 1, BrandId = 1, ColorId = 1, ModelYear = 2011, DailyPrice = 135000, Description = "Muayyer Mitsubishi L200 4*4"
                 },
                 new Car()
                 {
-                    Id = 2, BrandId = 1, ColorId = 2, ModelYear = "2013", DailyPrice = 175000, Description = "Hatasız Mitsubishi Lancer"
+                    Id = 2, BrandId = 1, ColorId = 2, ModelYear = 2013, DailyPrice = 175000, Description = "Hatasız Mitsubishi Lancer"
                 },
                 new Car()
                 {
-                    Id = 3, BrandId = 2, ColorId = 2, ModelYear = "2014", DailyPrice = 155000,
+                    Id = 3, BrandId = 2, ColorId = 2, ModelYear = 2014, DailyPrice = 155000,
                     Description = "Meraklısına Vosvos"
                 },
                 new Car()
                 {
-                    Id = 4, BrandId = 2, ColorId = 3, ModelYear = "2011", DailyPrice = 115000,
+                    Id = 4, BrandId = 2, ColorId = 3, ModelYear = 2011, DailyPrice = 115000,
                     Description = "Pazarlıksız Volkswagen Passat!"
                 },
                 new Car()
                 {
-                    Id = 5, BrandId = 3, ColorId = 4, ModelYear = "2019", DailyPrice = 335000, Description = "Emsalsiz Audi A6 Quatro"
+                    Id = 5, BrandId = 3, ColorId = 4, ModelYear = 2019, DailyPrice = 335000, Description = "Emsalsiz Audi A6 Quatro"
                 }
             };
         }
@@ -48,6 +49,16 @@ namespace DataAccess.Concrete.InMemory
         public List<Car> GetAll()
         {
             return _cars;
+        }
+
+        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Car Get(Expression<Func<Car, bool>> filter)
+        {
+            throw new NotImplementedException();
         }
 
         public void Add(Car car)
