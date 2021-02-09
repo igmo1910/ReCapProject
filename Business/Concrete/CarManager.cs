@@ -4,6 +4,7 @@ using System.Text;
 using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -41,7 +42,6 @@ namespace Business.Concrete
             {
                 Console.WriteLine("Araba eklenmedi! Araba ismi en az 2 karakter olmalıdır ve günlük fiyatı 0'dan büyük olmalıdır!");
             }
-
         }
 
         public bool CheckCarNameLength(Car car)
@@ -66,6 +66,34 @@ namespace Business.Concrete
             {
                 return false;
             }
+        }
+
+        public void Update(Car car)
+        {
+            if (CheckCarNameLength(car) && CheckCarDailyPrice(car))
+            {
+                _carDal.Update(car);
+            }
+            else
+            {
+                Console.WriteLine("Araba güncellenemedi! Araba ismi en az 2 karakter olmalıdır ve günlük fiyatı 0'dan büyük olmalıdır!");
+            }
+        }
+
+        public void Delete(Car car)
+        {
+            _carDal.Delete(car);
+            Console.WriteLine("Araba silindi!");
+        }
+
+        public Car GetCarById(int id)
+        {
+            return _carDal.Get(c => c.Id == id);
+        }
+
+        public List<CarDetailDto> GeCarDetails()
+        {
+            return _carDal.GetCarDetails();
         }
     }
 }

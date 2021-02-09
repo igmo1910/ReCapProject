@@ -20,5 +20,26 @@ namespace Business.Concrete
         {
             _brandDal.Add(brand);
         }
+
+        public void Update(Brand brand)
+        {
+            _brandDal.Update(brand);
+        }
+
+        public void Delete(Brand brand)
+        {
+            _brandDal.Delete(brand);
+            Console.WriteLine("Marka silindi!");
+        }
+
+        public List<Brand> GetBrands()
+        {
+            return _brandDal.GetAll();
+        }
+
+        public Brand GetBrandById(int brandId)
+        {
+            return _brandDal.Get(b => b.Id == brandId);
+        }
     }
 }
