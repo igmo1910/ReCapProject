@@ -1,9 +1,11 @@
 ﻿using System;
 using Business.Abstract;
 using Business.Concrete;
+using Core.Entities;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace ConsoleUI
 {
@@ -14,6 +16,9 @@ namespace ConsoleUI
             CarManager carManager = new CarManager(new EfCarDal());
             ColorManager colorManager = new ColorManager(new EfColorDal());
             BrandManager brandManager = new BrandManager(new EfBrandDal());
+            UserManager userManager = new UserManager(new EfUserDal());
+            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
             Console.WriteLine("1- Araba ekle");
             Console.WriteLine("2- Araba güncelle");
@@ -27,6 +32,9 @@ namespace ConsoleUI
             Console.WriteLine("10- Arabaları Listele");
             Console.WriteLine("11- Markaları Listele");
             Console.WriteLine("12- Renkleri Listele");
+            Console.WriteLine("13- Kullanıcı Ekle");
+            Console.WriteLine("14- Müşteri Ekle");
+            Console.WriteLine("15- Araba Kirala");
             Console.Write("Yapmak istediğiniz işlemi seçin:");
             var selectedOperation = Convert.ToInt32(Console.ReadLine());
 
@@ -132,33 +140,100 @@ namespace ConsoleUI
                 case 12:
                     ListAllColors(colorManager);
                     break;
+                case 13:
+                    var userToAdd = new User();
+                    Console.Write("Kullanıcı adı: ");
+                    userToAdd.FirstName = Console.ReadLine();
+                    Console.Write("Kullanıcı soyadı: ");
+                    userToAdd.LastName = Console.ReadLine();
+                    Console.Write("E-posta adresi: ");
+                    userToAdd.Email = Console.ReadLine();
+                    Console.Write("Şifre: ");
+                    userToAdd.Password = Console.ReadLine();
+                    result = userManager.Add(userToAdd);
+                    Console.WriteLine(result.Message);
+                    break;
+                case 14:
+                    ListAllUsers(userManager);
+                    Console.Write("Müşteri olacak kullanıcıyı seçiniz: ");
+                    selectedId = Convert.ToInt32(Console.ReadLine());
+                    var selectedUser = userManager.GetUserById(selectedId).Data;
+                    var customerToAdd = new Customer();
+                    customerToAdd.UserId = selectedUser.Id;
+                    Console.Write("Şirket adı: ");
+                    customerToAdd.CompanyName = Console.ReadLine();
+                    result = customerManager.Add(customerToAdd);
+                    Console.WriteLine(result.Message);
+                    break;
+                case 15:
+                    ListAllCars(carManager);
+                    Console.Write("Kiralanacak arabayı seçiniz: ");
+                    var selectedCar = Convert.ToInt32(Console.ReadLine());
+                    result = rentalManager.CheckCarRentalStatus(selectedCar);
+                    if (result.Success)
+                    {
+                        Console.WriteLine(result.Message);
+                    }
+                    else
+                    {
+                        Console.WriteLine(result.Message);
+                        break;
+                    }
+                    ListAllCustomers(customerManager);
+                    Console.Write("Kiralayacak müşteriyi seçiniz: ");
+                    var selectedCustomer = Convert.ToInt32(Console.ReadLine());
+                    var rentalToAdd = new Rental();
+                    rentalToAdd.CarId = selectedCar;
+                    rentalToAdd.CustomerId = selectedCustomer;
+                    rentalToAdd.RentDate = DateTime.Now;
+                    var rentalResult = rentalManager.Add(rentalToAdd);
+                    Console.WriteLine(rentalResult.Message);
+                    break;
             }
         }
 
         private static void ListAllColors(ColorManager colorManager)
         {
+            Console.WriteLine("-----Renkler-----");
             foreach (var color in colorManager.GetColors().Data)
             {
-                Console.WriteLine("-----Renkler-----");
                 Console.WriteLine("{0} / {1}", color.Id, color.Name);
             }
         }
 
         private static void ListAllCars(CarManager carManager)
         {
+            Console.WriteLine("-----Arabalar-----");
             foreach (var c in carManager.GetCarDetails().Data)
             {
-                Console.WriteLine("-----Arabalar-----");
                 Console.WriteLine("{0} / {1} / {2} / {3} / {4} / {5}", c.CarId, c.CarName, c.BrandName, c.ColorName, c.ModelYear, c.DailyPrice);
             }
         }
 
         private static void ListAllBrands(BrandManager brandManager)
         {
+            Console.WriteLine("-----Markalar-----");
             foreach (var brand in brandManager.GetBrands().Data)
             {
-                Console.WriteLine("-----Markalar-----");
                 Console.WriteLine("{0} / {1}", brand.Id, brand.Name);
+            }
+        }
+
+        private static void ListAllUsers(UserManager userManager)
+        {
+            Console.WriteLine("-----Kullanıcılar-----");
+            foreach (var user in userManager.GetUsers().Data)
+            {
+                Console.WriteLine("{0} / {1} / {2}", user.Id, user.FirstName, user.LastName);
+            }
+        }
+
+        private static void ListAllCustomers(CustomerManager customerManager)
+        {
+            Console.WriteLine("-----Müşteriler-----");
+            foreach (var customer in customerManager.GetCustomerDetails().Data)
+            {
+                Console.WriteLine("{0} / {1} / {2} / {3}", customer.CustomerId, customer.FirstName, customer.LastName, customer.CompanyName);
             }
         }
     }

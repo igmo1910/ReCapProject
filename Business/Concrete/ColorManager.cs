@@ -21,19 +21,19 @@ namespace Business.Concrete
         public IResult Add(Color color)
         {
             _colorDal.Add(color);
-            return new Result(Messages.ColorAdded);
+            return new SuccessResult(Messages.ColorAdded);
         }
 
         public IResult Update(Color color)
         {
             _colorDal.Update(color);
-            return new Result(Messages.ColorUpdated);
+            return new SuccessResult(Messages.ColorUpdated);
         }
 
         public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
-            return new Result(Messages.ColorDeleted);
+            return new SuccessResult(Messages.ColorDeleted);
         }
         
         public IDataResult<List<Color>> GetColors()
