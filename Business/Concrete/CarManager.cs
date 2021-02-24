@@ -4,10 +4,15 @@ using System.Net.Http;
 using System.Text;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
 
 namespace Business.Concrete
 {
@@ -35,24 +40,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(car => car.ColorId == id));
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (CheckCarNameLength(car))
-            {
-                if (CheckCarDailyPrice(car))
-                {
-                    _carDal.Add(car);
-                    return new SuccessResult(Messages.CarAdded);
-                }
-                else
-                {
-                    return new ErrorResult(Messages.InvalidDailyPrice);
-                }
-            }
-            else
-            {
-                return new ErrorResult(Messages.InvalidCarName);
-            }
+            _carDal.Add(car);
+
+            return new SuccessResult(Messages.CarAdded);
         }
 
         public bool CheckCarNameLength(Car car)
