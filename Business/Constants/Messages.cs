@@ -26,6 +26,15 @@ namespace Business.Constants
         public static string RentalAdded = "Kiralama eklendi";
         public static string RentalUpdated { get; set; }
         public static string RentalDeleted { get; set; }
+        public static string DefaultImageShown = "Default resim gösterildi";
+
+        public static string ImageDeletedSuccesfully = "Resim silme başarılı";
+
+        public static string ImagesUploadedSuccesfully = "Resim yükleme başarılı";
+        public static string ImagesUpdatedSuccesfully = "Resim güncelleme başarılı";
+
+        public static string CarImagesCountFull = "Bir araç için en fazla 5 resim yüklenebilir";
+
         public static string CarCanBeRented = "Araba kiralanabilir";
         public static string CarAlreadyRented = "Araba zaten kirada";
     }
